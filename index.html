@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Vista Geomatics – Equipment Repair / Replace Notification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+          integrity="sha512-YcsIPGqvMhn8G2C8of6o0M0GkGLumZ5qX6Ch12RSaxDTXiiMHDL/95B2S/bRMyCV2wAPOQgpdnX3LQGWF3f3cA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <style>
+    :root {
+      --vista-blue: #005a9c;
+      --vista-blue-light: #e6f0fa;
+      --vista-blue-dark: #003a64;
+      --accent: #1f9cf0;
+      --border-soft: #d4dbe5;
+      --bg-page: #0b0b0f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #202634, #050509 60%, #000000);
+      color: #111827;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .wrapper {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Header */
+    .card-header {
+      padding: 20px 24px 18px;
+      background: linear-gradient(135deg, var(--vista-blue-dark), #0a2340);
+      color: #f9fafb;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+    }
+
+    .header-text {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .company-name {
+      font-family: "Montserrat", system-ui, sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .form-title {
+      font-family: "Montserrat", system-ui, sans-serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+
+    .card-body {
+      padding: 20px 24px 24px;
+      background: #f9fafb;
+    }
+
+    .section {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      padding: 16px 16px 18px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: var(--vista-blue-dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title span.bar {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--vista-blue-light), transparent);
+      opacity: 0.8;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .field label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .field-row .field {
+      flex: 1;
+      margin-bottom: 0;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"],
+    textarea,
+    select {
+      font-family: inherit;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      padding: 7px 9px;
+      outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+      background: #fdfdfd;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(31, 156, 240, 0.18);
+      background: #ffffff;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .muted {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    /* Supervisor block (styles kept but not currently used) */
+    .supervisor-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px 18px;
+      margin-top: 8px;
+    }
+
+    .supervisor-card {
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px 12px;
+      background: #fdfefe;
+    }
+
+    .supervisor-card-title {
+      font-size: 0.86rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #111827;
+    }
+
+    .check-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      font-size: 0.8rem;
+      color: #374151;
+      align-items: center;
+    }
+
+    .check-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .check-row input[type="radio"] {
+      accent-color: var(--accent);
+    }
+
+    /* Photo upload section */
+    .upload-area {
+      border-radius: 10px;
+      border: 1px dashed #c4c9d4;
+      padding: 12px;
+      background: #f3f4f6;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .upload-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .upload-main-text {
+      font-size: 0.84rem;
+      color: #111827;
+      font-weight: 500;
+    }
+
+    .upload-sub-text {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .upload-input {
+      font-size: 0.8rem;
+    }
+
+    .photo-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .photo-thumb {
+      background: #ffffff;
+      border-radius: 9px;
+      border: 1px solid #d1d5db;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .photo-thumb img {
+      width: 100%;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .photo-thumb input[type="text"] {
+      font-size: 0.8rem;
+      padding: 5px 7px;
+    }
+
+    .photo-thumb small {
+      font-size: 0.72rem;
+      color: #6b7280;
+    }
+
+    /* Footer / actions */
+    .card-footer {
+      padding: 12px 18px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      background: #f3f4f6;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 7px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.1s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #36b8ff);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(31, 156, 240, 0.45);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(31, 156, 240, 0.55);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    .helper-text {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    /* PDF-only photo pages */
+    #photoPagesForPdf {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .for-pdf #photoPagesForPdf {
+      display: block;
+    }
+
+    .photo-page {
+      page-break-before: always;
+      padding-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-auto-rows: minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .photo-page-card {
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      padding: 10px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      justify-content: flex-start;
+    }
+
+    .photo-page-card img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .photo-page-card p {
+      font-size: 0.8rem;
+      color: #111827;
+      margin: 0;
+    }
+
+    .photo-page-title {
+      grid-column: 1 / -1;
+      font-family: "Montserrat", system-ui, sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #111827;
+      margin-bottom: 2px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 16px;
+      }
+      .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .card-body {
+        padding: 16px;
+      }
+      .card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="card" id="pdfContent">
+      <!-- Header -->
+      <div class="card-header">
+        <!-- Replace src with the correct path to your Vista logo -->
+        <img src="vista-logo.png" alt="Vista Geomatics Logo" class="logo" />
+        <div class="header-text">
+          <div class="company-name">Vista Geomatics</div>
+          <div class="form-title">Equipment Repair / Replace Notification</div>
+          <div class="header-subtitle">Use this form to report damaged or malfunctioning equipment and document the required repair or replacement.</div>
+        </div>
+      </div>
+
+      <!-- Body -->
+      <div class="card-body">
+        <!-- Equipment details -->
+        <section class="section">
+          <div class="section-title">
+            Equipment Details
+            <span class="bar"></span>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="item">Item</label>
+              <input type="text" id="item" name="item" placeholder="e.g., GPS Rover, Data Collector" />
+            </div>
+
+            <div class="field">
+              <label for="make">Make</label>
+              <input type="text" id="make" name="make" placeholder="e.g., Trimble, Leica" />
+            </div>
+
+            <div class="field">
+              <label for="model">Model</label>
+              <input type="text" id="model" name="model" placeholder="Model number / name" />
+            </div>
+
+            <div class="field">
+              <label for="serial">Serial #</label>
+              <input type="text" id="serial" name="serial" placeholder="Serial number" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Incident & repair -->
+        <section class="section">
+          <div class="section-title">
+            Incident &amp; Repair Information
+            <span class="bar"></span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="incident-date">Date of Incident</label>
+              <input type="date" id="incident-date" name="incident-date" />
+            </div>
+            <div class="field">
+              <label for="party-chief">Party Chief</label>
+              <input type="text" id="party-chief" name="party-chief" placeholder="Party Chief name" />
+            </div>
+            <div class="field">
+              <label for="rodman">Rodman</label>
+              <input type="text" id="rodman" name="rodman" placeholder="Rodman / Assistant" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="repair-desc">Describe repair required</label>
+            <textarea id="repair-desc" name="repair-desc" placeholder="Provide a clear description of the repair or replacement required."></textarea>
+          </div>
+
+          <div class="field">
+            <label for="incident-desc">Describe incident that created need for repair or replacement</label>
+            <textarea id="incident-desc" name="incident-desc" placeholder="Summarize what happened, including location, conditions, and any contributing factors."></textarea>
+          </div>
+        </section>
+
+        <!-- Reporting -->
+        <section class="section">
+          <div class="section-title">
+            Reporting Details
+            <span class="bar"></span>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="date-reported">Date Reported</label>
+              <input type="date" id="date-reported" name="date-reported" />
+            </div>
+            <div class="field">
+              <label for="repair-cost">Estimated Cost of Repair / Replacement</label>
+              <input type="text" id="repair-cost" name="repair-cost" placeholder="$" />
+            </div>
+          </div>
+
+          <p class="muted">Enter who the issue was reported to and, if applicable, how it was reported.</p>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="reported-to">Reported To (Name / Role)</label>
+              <input type="text" id="reported-to" name="reported-to" placeholder="e.g., Operations Manager, Shop Supervisor" />
+            </div>
+            <div class="field">
+              <label for="report-method">Method of Report</label>
+              <input type="text" id="report-method" name="report-method" placeholder="e.g., Phone, In Person, Email" />
+            </div>
+          </div>
+        </section>
+
+        <!-- Photos -->
+        <section class="section">
+          <div class="section-title">
+            Photos of Damage 
+            <span class="bar"></span>
+          </div>
+
+          <div class="upload-area">
+            <div class="upload-header">
+              <div>
+                <div class="upload-main-text">Attach photos of the damage or defect</div>
+                <div class="upload-sub-text">
+                  Thumbnails will display below. For the PDF, photos will be placed on separate pages, 4 per page, with the descriptions you enter.
+                </div>
+              </div>
+              <input
+                class="upload-input"
+                type="file"
+                id="photoUpload"
+                accept="image/*"
+                multiple
+              />
+            </div>
+
+            <div id="photoPreview" class="photo-preview-grid"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Hidden container for PDF photo pages -->
+      <div id="photoPagesForPdf"></div>
+
+      <!-- Footer -->
+      <div class="card-footer">
+        <div class="helper-text">
+          Save this completed form as a PDF before submitting it to your supervisor or the office.
+        </div>
+        <div class="actions">
+          <button type="button" class="btn btn-secondary" id="resetForm">
+            Reset Form
+          </button>
+          <button type="button" class="btn btn-primary" id="downloadPdf">
+            Download PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Store photo data (image + description)
+    const photoData = [];
+
+    const photoInput = document.getElementById("photoUpload");
+    const photoPreview = document.getElementById("photoPreview");
+    const photoPagesForPdf = document.getElementById("photoPagesForPdf");
+    const pdfContent = document.getElementById("pdfContent");
+
+    photoInput.addEventListener("change", (event) => {
+      const files = Array.from(event.target.files);
+      if (!files.length) return;
+
+      files.forEach((file) => {
+        if (!file.type.startsWith("image/")) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const index = photoData.length;
+          const dataUrl = e.target.result;
+
+          photoData.push({ dataUrl, description: "" });
+          addThumbnail(index, dataUrl);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Clear the input so same file can be chosen again later if needed
+      photoInput.value = "";
+    });
+
+    function addThumbnail(index, dataUrl) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "photo-thumb";
+      wrapper.dataset.index = index;
+
+      const img = document.createElement("img");
+      img.src = dataUrl;
+      img.alt = "Uploaded photo " + (index + 1);
+
+      const descInput = document.createElement("input");
+      descInput.type = "text";
+      descInput.placeholder = "Photo description (optional)";
+      descInput.addEventListener("input", (e) => {
+        const idx = parseInt(wrapper.dataset.index, 10);
+        if (!Number.isNaN(idx) && photoData[idx]) {
+          photoData[idx].description = e.target.value;
+        }
+      });
+
+      const hint = document.createElement("small");
+      hint.textContent = "Will appear under this photo in the PDF.";
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(descInput);
+      wrapper.appendChild(hint);
+      photoPreview.appendChild(wrapper);
+    }
+
+    function buildPhotoPagesForPdf() {
+      photoPagesForPdf.innerHTML = "";
+      if (!photoData.length) return;
+
+      let pageDiv = null;
+
+      photoData.forEach((photo, idx) => {
+        if (idx % 4 === 0) {
+          // New page
+          pageDiv = document.createElement("div");
+          pageDiv.className = "photo-page";
+
+          const pageTitle = document.createElement("div");
+          pageTitle.className = "photo-page-title";
+          pageTitle.textContent = "Equipment Damage Photos (Page " + (Math.floor(idx / 4) + 1) + ")";
+          pageDiv.appendChild(pageTitle);
+
+          photoPagesForPdf.appendChild(pageDiv);
+        }
+
+        const card = document.createElement("div");
+        card.className = "photo-page-card";
+
+        const img = document.createElement("img");
+        img.src = photo.dataUrl;
+        img.alt = "Damage photo " + (idx + 1);
+
+        const desc = document.createElement("p");
+        desc.textContent = photo.description
+          ? photo.description
+          : "Photo " + (idx + 1);
+
+        card.appendChild(img);
+        card.appendChild(desc);
+        pageDiv.appendChild(card);
+      });
+    }
+
+    // Download PDF
+    document.getElementById("downloadPdf").addEventListener("click", () => {
+      // Build photo pages
+      buildPhotoPagesForPdf();
+
+      // Add a class so hidden photo pages become visible only for PDF
+      pdfContent.classList.add("for-pdf");
+
+      const opt = {
+        margin: 0.4,
+        filename: "Equipment_Repair_Replace_Notification.pdf",
+        image: { type: "jpeg", quality: 0.96 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true
+        },
+        jsPDF: {
+          unit: "in",
+          format: "letter",
+          orientation: "portrait"
+        },
+        pagebreak: { mode: ["css", "legacy"] }
+      };
+
+      html2pdf()
+        .set(opt)
+        .from(pdfContent)
+        .save()
+        .then(() => {
+          // Remove class & clean up container after render so screen view stays tidy
+          pdfContent.classList.remove("for-pdf");
+          photoPagesForPdf.innerHTML = "";
+        })
+        .catch(() => {
+          pdfContent.classList.remove("for-pdf");
+          photoPagesForPdf.innerHTML = "";
+        });
+    });
+
+    // Reset form
+    document.getElementById("resetForm").addEventListener("click", () => {
+      if (!confirm("Clear all fields and remove all uploaded photos?")) return;
+
+      // Clear basic inputs & textareas
+      const inputs = pdfContent.querySelectorAll("input[type='text'], input[type='date'], input[type='number'], textarea");
+      inputs.forEach((input) => (input.value = ""));
+
+      // Clear radios (in case you ever add any back)
+      const radios = pdfContent.querySelectorAll("input[type='radio']");
+      radios.forEach((r) => (r.checked = false));
+
+      // Clear photo data and previews
+      photoData.length = 0;
+      photoPreview.innerHTML = "";
+      photoPagesForPdf.innerHTML = "";
+      photoInput.value = "";
+    });
+  </script>
+</body>
+</html>
