@@ -53,7 +53,6 @@
     /* Main form container (single PDF page) */
     .main-form-page {
       background: #ffffff;
-      /* no page-break-after here – we want the form to stay as one page */
     }
 
     /* Header */
@@ -344,8 +343,11 @@
       display: block;
     }
 
-    /* Hide thumbnails in PDF so they don't push the form */
+    /* Hide thumbnails and footer in the PDF so page 1 is just the form */
     .for-pdf #photoPreview {
+      display: none;
+    }
+    .for-pdf .card-footer {
       display: none;
     }
 
@@ -413,7 +415,7 @@
 <body>
   <div class="wrapper">
     <div class="card" id="pdfContent">
-      <!-- Main form page (aimed to fit on a single PDF page) -->
+      <!-- Main form page -->
       <div class="main-form-page">
         <!-- Header -->
         <div class="card-header">
@@ -555,7 +557,7 @@
           </section>
         </div>
 
-        <!-- Footer (part of main form page) -->
+        <!-- Footer (visible on-screen, hidden in PDF) -->
         <div class="card-footer">
           <div class="helper-text">
             Save this completed form as a PDF before submitting it to your supervisor or the office.
@@ -684,11 +686,11 @@
       // Build photo pages
       buildPhotoPagesForPdf();
 
-      // Show photo pages / hide thumbnails during PDF generation
+      // Show photo pages / hide thumbnails and footer during PDF generation
       pdfContent.classList.add("for-pdf");
 
       const opt = {
-        margin: 0.2, // give more vertical space so the whole form fits on one page
+        margin: 0.2,
         filename: "Equipment_Repair_Replace_Notification.pdf",
         image: { type: "jpeg", quality: 0.96 },
         html2canvas: { scale: 2, useCORS: true },
