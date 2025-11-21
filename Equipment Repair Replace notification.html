@@ -8,7 +8,7 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
 
-  <!-- html2pdf (no integrity so it will not be blocked) -->
+  <!-- html2pdf -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
@@ -50,24 +50,24 @@
       border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    /* Ensure the main form is treated as one PDF page */
+    /* Main form container (single PDF page) */
     .main-form-page {
       background: #ffffff;
-      page-break-after: always;
+      /* no page-break-after here – we want the form to stay as one page */
     }
 
     /* Header */
     .card-header {
-      padding: 20px 24px 18px;
+      padding: 14px 18px 12px;
       background: linear-gradient(135deg, var(--vista-blue-dark), #0a2340);
       color: #f9fafb;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .logo {
-      height: 48px;
+      height: 42px;
       width: auto;
       object-fit: contain;
       filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
@@ -76,12 +76,12 @@
     .header-text {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
 
     .brand-title {
       font-family: "Montserrat", system-ui, sans-serif;
-      font-size: 1.1rem;
+      font-size: 1rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       display: inline-flex;
@@ -90,45 +90,45 @@
     }
 
     .brand-vista {
-      font-weight: 700; /* Bold */
+      font-weight: 700;
     }
 
     .brand-geomatics {
-      font-weight: 400; /* Regular */
+      font-weight: 400;
     }
 
     .form-title {
       font-family: "Montserrat", system-ui, sans-serif;
       font-weight: 700;
-      font-size: 1.35rem;
-      line-height: 1.2;
+      font-size: 1.18rem;
+      line-height: 1.15;
     }
 
     .header-subtitle {
-      font-size: 0.8rem;
-      opacity: 0.85;
+      font-size: 0.78rem;
+      opacity: 0.9;
     }
 
     .card-body {
-      padding: 20px 24px 24px;
+      padding: 14px 18px 16px;
       background: #f9fafb;
     }
 
     .section {
       background: #ffffff;
-      border-radius: 12px;
+      border-radius: 10px;
       border: 1px solid var(--border-soft);
-      padding: 16px 16px 18px;
-      margin-bottom: 14px;
+      padding: 10px 10px 12px;
+      margin-bottom: 8px;
     }
 
     .section-title {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 600;
       color: var(--vista-blue-dark);
-      margin-bottom: 10px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -143,26 +143,26 @@
 
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 12px 18px;
+      grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+      gap: 8px 14px;
     }
 
     .field {
       display: flex;
       flex-direction: column;
-      gap: 4px;
-      margin-bottom: 10px;
+      gap: 3px;
+      margin-bottom: 6px;
     }
 
     .field label {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 500;
       color: #374151;
     }
 
     .field-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
@@ -177,10 +177,10 @@
     textarea,
     select {
       font-family: inherit;
-      font-size: 0.9rem;
-      border-radius: 8px;
+      font-size: 0.86rem;
+      border-radius: 7px;
       border: 1px solid #d1d5db;
-      padding: 7px 9px;
+      padding: 5px 8px;
       outline: none;
       transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
       background: #fdfdfd;
@@ -197,24 +197,24 @@
     }
 
     textarea {
-      min-height: 80px;
+      min-height: 60px;
       resize: vertical;
     }
 
     .muted {
-      font-size: 0.8rem;
+      font-size: 0.76rem;
       color: #6b7280;
     }
 
     /* Photo upload section */
     .upload-area {
-      border-radius: 10px;
+      border-radius: 9px;
       border: 1px dashed #c4c9d4;
-      padding: 12px;
+      padding: 9px;
       background: #f3f4f6;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .upload-header {
@@ -226,62 +226,62 @@
     }
 
     .upload-main-text {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       color: #111827;
       font-weight: 500;
     }
 
     .upload-sub-text {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       color: #6b7280;
     }
 
     .upload-input {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
     }
 
     .photo-preview-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 10px;
-      margin-top: 8px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+      margin-top: 4px;
     }
 
     .photo-thumb {
       background: #ffffff;
-      border-radius: 9px;
+      border-radius: 7px;
       border: 1px solid #d1d5db;
-      padding: 8px;
+      padding: 6px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 4px;
     }
 
     .photo-thumb img {
       width: 100%;
-      height: 110px;
+      height: 100px;
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 5px;
       border: 1px solid #e5e7eb;
     }
 
     .photo-thumb input[type="text"] {
-      font-size: 0.8rem;
-      padding: 5px 7px;
+      font-size: 0.78rem;
+      padding: 4px 6px;
     }
 
     .photo-thumb small {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: #6b7280;
     }
 
     /* Footer / actions */
     .card-footer {
-      padding: 12px 18px 16px;
+      padding: 8px 16px 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
       background: #f3f4f6;
       border-top: 1px solid #e5e7eb;
@@ -295,8 +295,8 @@
 
     .btn {
       border-radius: 999px;
-      padding: 7px 16px;
-      font-size: 0.85rem;
+      padding: 6px 14px;
+      font-size: 0.8rem;
       font-weight: 500;
       border: none;
       cursor: pointer;
@@ -311,12 +311,12 @@
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), #36b8ff);
       color: #ffffff;
-      box-shadow: 0 10px 20px rgba(31, 156, 240, 0.45);
+      box-shadow: 0 7px 16px rgba(31, 156, 240, 0.45);
     }
 
     .btn-primary:hover {
       transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(31, 156, 240, 0.55);
+      box-shadow: 0 10px 22px rgba(31, 156, 240, 0.55);
     }
 
     .btn-secondary {
@@ -330,55 +330,55 @@
     }
 
     .helper-text {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: #6b7280;
     }
 
     /* PDF-only photo pages */
     #photoPagesForPdf {
       display: none;
-      margin-top: 20px;
+      margin-top: 10px;
     }
 
     .for-pdf #photoPagesForPdf {
       display: block;
     }
 
-    /* Hide thumbnail grid in the PDF so the first page stays compact */
+    /* Hide thumbnails in PDF so they don't push the form */
     .for-pdf #photoPreview {
       display: none;
     }
 
     .photo-page {
       page-break-before: always;
-      padding-top: 18px;
+      padding-top: 12px;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       grid-auto-rows: minmax(0, 1fr);
-      gap: 16px;
+      gap: 12px;
     }
 
     .photo-page-card {
-      border-radius: 10px;
+      border-radius: 9px;
       border: 1px solid #d1d5db;
-      padding: 10px;
+      padding: 8px;
       background: #ffffff;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       justify-content: flex-start;
     }
 
     .photo-page-card img {
       width: 100%;
-      height: 230px;
+      height: 210px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 7px;
       border: 1px solid #e5e7eb;
     }
 
     .photo-page-card p {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: #111827;
       margin: 0;
     }
@@ -387,7 +387,7 @@
       grid-column: 1 / -1;
       font-family: "Montserrat", system-ui, sans-serif;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #111827;
       margin-bottom: 2px;
     }
@@ -401,7 +401,7 @@
         align-items: center;
       }
       .card-body {
-        padding: 16px;
+        padding: 12px;
       }
       .card-footer {
         flex-direction: column;
@@ -413,7 +413,7 @@
 <body>
   <div class="wrapper">
     <div class="card" id="pdfContent">
-      <!-- Main form page (forced to be the first page) -->
+      <!-- Main form page (aimed to fit on a single PDF page) -->
       <div class="main-form-page">
         <!-- Header -->
         <div class="card-header">
@@ -446,7 +446,7 @@
 
               <div class="field">
                 <label for="make">Make</label>
-                <input type="text" id="make" name="make" placeholder="e.g., Trimble, Topcon" />
+                <input type="text" id="make" name="make" placeholder="e.g., Trimble, Leica" />
               </div>
 
               <div class="field">
@@ -526,7 +526,7 @@
             </div>
           </section>
 
-          <!-- Photos (thumbnails only for on-screen; hidden for PDF) -->
+          <!-- Photos (thumbnails for on-screen; hidden in PDF) -->
           <section class="section">
             <div class="section-title">
               Photos of Damage (Optional)
@@ -555,7 +555,7 @@
           </section>
         </div>
 
-        <!-- Footer (part of the main form page) -->
+        <!-- Footer (part of main form page) -->
         <div class="card-footer">
           <div class="helper-text">
             Save this completed form as a PDF before submitting it to your supervisor or the office.
@@ -684,11 +684,11 @@
       // Build photo pages
       buildPhotoPagesForPdf();
 
-      // Show photo pages and hide thumbnails only during PDF generation
+      // Show photo pages / hide thumbnails during PDF generation
       pdfContent.classList.add("for-pdf");
 
       const opt = {
-        margin: 0.4,
+        margin: 0.2, // give more vertical space so the whole form fits on one page
         filename: "Equipment_Repair_Replace_Notification.pdf",
         image: { type: "jpeg", quality: 0.96 },
         html2canvas: { scale: 2, useCORS: true },
