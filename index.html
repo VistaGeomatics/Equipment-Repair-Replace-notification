@@ -2,16 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Vista Geomatics – Equipment Repair / Replace Notification</title>
+  <title>VISTAGEOMATICS – Equipment Repair / Replace Notification</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
 
-  <!-- html2pdf -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
-          integrity="sha512-YcsIPGqvMhn8G2C8of6o0M0GkGLumZ5qX6Ch12RSaxDTXiiMHDL/95B2S/bRMyCV2wAPOQgpdnX3LQGWF3f3cA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- html2pdf (no integrity so it will not be blocked) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
     :root {
@@ -72,16 +70,25 @@
     .header-text {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
 
-    .company-name {
+    .brand-title {
       font-family: "Montserrat", system-ui, sans-serif;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      font-size: 0.85rem;
+      font-size: 1.1rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      opacity: 0.9;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0;
+    }
+
+    .brand-vista {
+      font-weight: 700; /* Bold */
+    }
+
+    .brand-geomatics {
+      font-weight: 400; /* Regular */
     }
 
     .form-title {
@@ -191,49 +198,6 @@
     .muted {
       font-size: 0.8rem;
       color: #6b7280;
-    }
-
-    /* Supervisor block (styles kept but not currently used) */
-    .supervisor-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 10px 18px;
-      margin-top: 8px;
-    }
-
-    .supervisor-card {
-      border-radius: 10px;
-      border: 1px solid #e5e7eb;
-      padding: 10px 12px 12px;
-      background: #fdfefe;
-    }
-
-    .supervisor-card-title {
-      font-size: 0.86rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: #111827;
-    }
-
-    .check-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 18px;
-      font-size: 0.8rem;
-      color: #374151;
-      align-items: center;
-    }
-
-    .check-row label {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      font-weight: 400;
-    }
-
-    .check-row input[type="radio"] {
-      accent-color: var(--accent);
     }
 
     /* Photo upload section */
@@ -422,8 +386,8 @@
         padding: 16px;
       }
       .card-header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
       }
       .card-body {
         padding: 16px;
@@ -440,12 +404,15 @@
     <div class="card" id="pdfContent">
       <!-- Header -->
       <div class="card-header">
-        <!-- Replace src with the correct path to your Vista logo -->
-        <img src="vista-logo.png" alt="Vista Geomatics Logo" class="logo" />
+        <img src="vista-geomatics.png" alt="Vista Geomatics Logo" class="logo" />
         <div class="header-text">
-          <div class="company-name">Vista Geomatics</div>
+          <div class="brand-title">
+            <span class="brand-vista">VISTA</span><span class="brand-geomatics">GEOMATICS</span>
+          </div>
           <div class="form-title">Equipment Repair / Replace Notification</div>
-          <div class="header-subtitle">Use this form to report damaged or malfunctioning equipment and document the required repair or replacement.</div>
+          <div class="header-subtitle">
+            Use this form to report damaged or malfunctioning equipment and document the required repair or replacement.
+          </div>
         </div>
       </div>
 
@@ -481,7 +448,7 @@
           </div>
         </section>
 
-        <!-- Incident & repair -->
+        <!-- Incident and repair -->
         <section class="section">
           <div class="section-title">
             Incident &amp; Repair Information
@@ -549,7 +516,7 @@
         <!-- Photos -->
         <section class="section">
           <div class="section-title">
-            Photos of Damage 
+            Photos of Damage (Optional)
             <span class="bar"></span>
           </div>
 
@@ -558,7 +525,7 @@
               <div>
                 <div class="upload-main-text">Attach photos of the damage or defect</div>
                 <div class="upload-sub-text">
-                  Thumbnails will display below. For the PDF, photos will be placed on separate pages, 4 per page, with the descriptions you enter.
+                  Thumbnails will display below. In the PDF, photos will be placed on separate pages, 4 per page, with the descriptions you enter.
                 </div>
               </div>
               <input
@@ -622,7 +589,7 @@
         reader.readAsDataURL(file);
       });
 
-      // Clear the input so same file can be chosen again later if needed
+      // Clear the input so the same file can be chosen again later if needed
       photoInput.value = "";
     });
 
@@ -662,13 +629,14 @@
 
       photoData.forEach((photo, idx) => {
         if (idx % 4 === 0) {
-          // New page
+          // New photo page
           pageDiv = document.createElement("div");
           pageDiv.className = "photo-page";
 
           const pageTitle = document.createElement("div");
           pageTitle.className = "photo-page-title";
-          pageTitle.textContent = "Equipment Damage Photos (Page " + (Math.floor(idx / 4) + 1) + ")";
+          pageTitle.textContent =
+            "Equipment Damage Photos (Page " + (Math.floor(idx / 4) + 1) + ")";
           pageDiv.appendChild(pageTitle);
 
           photoPagesForPdf.appendChild(pageDiv);
@@ -694,20 +662,22 @@
 
     // Download PDF
     document.getElementById("downloadPdf").addEventListener("click", () => {
+      if (typeof html2pdf === "undefined") {
+        alert("PDF library failed to load. Please check your internet connection and try again.");
+        return;
+      }
+
       // Build photo pages
       buildPhotoPagesForPdf();
 
-      // Add a class so hidden photo pages become visible only for PDF
+      // Make photo pages visible only during PDF generation
       pdfContent.classList.add("for-pdf");
 
       const opt = {
         margin: 0.4,
         filename: "Equipment_Repair_Replace_Notification.pdf",
         image: { type: "jpeg", quality: 0.96 },
-        html2canvas: {
-          scale: 2,
-          useCORS: true
-        },
+        html2canvas: { scale: 2, useCORS: true },
         jsPDF: {
           unit: "in",
           format: "letter",
@@ -721,7 +691,6 @@
         .from(pdfContent)
         .save()
         .then(() => {
-          // Remove class & clean up container after render so screen view stays tidy
           pdfContent.classList.remove("for-pdf");
           photoPagesForPdf.innerHTML = "";
         })
@@ -735,15 +704,11 @@
     document.getElementById("resetForm").addEventListener("click", () => {
       if (!confirm("Clear all fields and remove all uploaded photos?")) return;
 
-      // Clear basic inputs & textareas
-      const inputs = pdfContent.querySelectorAll("input[type='text'], input[type='date'], input[type='number'], textarea");
+      const inputs = pdfContent.querySelectorAll(
+        "input[type='text'], input[type='date'], input[type='number'], textarea"
+      );
       inputs.forEach((input) => (input.value = ""));
 
-      // Clear radios (in case you ever add any back)
-      const radios = pdfContent.querySelectorAll("input[type='radio']");
-      radios.forEach((r) => (r.checked = false));
-
-      // Clear photo data and previews
       photoData.length = 0;
       photoPreview.innerHTML = "";
       photoPagesForPdf.innerHTML = "";
