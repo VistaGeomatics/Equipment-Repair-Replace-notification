@@ -328,24 +328,7 @@
       color: #6b7280;
     }
 
-    /* PDF-only photo pages & wrapper */
-    #pdfWrapper {
-      display: none;               /* made visible only during PDF generation */
-    }
-
-    .pdf-root {
-      background: #ffffff;
-      padding: 0;
-      margin: 0;
-      width: 8.5in;
-    }
-
-    .pdf-root .card {
-      border-radius: 0;
-      box-shadow: none;
-      border: none;
-    }
-
+    /* PDF photo pages */
     .photo-page {
       page-break-before: always;
       padding: 12px 18px 14px;
@@ -520,7 +503,7 @@
           </div>
         </section>
 
-        <!-- Photos (screen only thumbnails) -->
+        <!-- Photos (screen thumbnails only) -->
         <section class="section" id="photoUploadSection">
           <div class="section-title">
             Photos of Damage (Optional)
@@ -565,16 +548,12 @@
     </div>
   </div>
 
-  <!-- HIDDEN PDF-ONLY WRAPPER -->
-  <div id="pdfWrapper"></div>
-
   <script>
     // Store photo data (image + description)
     const photoData = [];
 
     const photoInput = document.getElementById("photoUpload");
     const photoPreview = document.getElementById("photoPreview");
-    const pdfWrapper = document.getElementById("pdfWrapper");
     const screenForm = document.getElementById("screenForm");
 
     photoInput.addEventListener("change", (event) => {
@@ -627,34 +606,43 @@
       photoPreview.appendChild(wrapper);
     }
 
-    function buildPdfDom() {
-      pdfWrapper.innerHTML = "";
-      pdfWrapper.className = "pdf-root";
+    function buildPdfRoot() {
+      // Create an off-screen container to render into PDF
+      const pdfRoot = document.createElement("div");
+      pdfRoot.style.background = "#ffffff";
+      pdfRoot.style.position = "absolute";
+      pdfRoot.style.left = "-9999px";
+      pdfRoot.style.top = "0";
+      pdfRoot.style.width = "800px";
+      pdfRoot.style.padding = "0";
+      pdfRoot.style.margin = "0";
 
-      // Clone the screen form into the PDF wrapper
+      // Clone the screen form
       const clone = screenForm.cloneNode(true);
+      // Give the clone a distinct id
       clone.id = "pdfForm";
 
-      // Remove interactive bits from the clone
-      const cloneUpload = clone.querySelector("#photoUploadSection");
-      if (cloneUpload) {
-        // keep the section box but remove input + thumbnails
-        const inputEl = cloneUpload.querySelector("#photoUpload");
-        if (inputEl && inputEl.parentElement) {
-          inputEl.parentElement.removeChild(inputEl);
+      // Remove upload input + thumbnails from the clone
+      const cloneUploadSection = clone.querySelector("#photoUploadSection");
+      if (cloneUploadSection) {
+        const cloneInput = cloneUploadSection.querySelector("#photoUpload");
+        if (cloneInput && cloneInput.parentElement) {
+          cloneInput.parentElement.removeChild(cloneInput);
         }
-        const thumbsEl = cloneUpload.querySelector("#photoPreview");
-        if (thumbsEl) {
-          thumbsEl.parentElement.removeChild(thumbsEl);
+        const cloneThumbs = cloneUploadSection.querySelector("#photoPreview");
+        if (cloneThumbs && cloneThumbs.parentElement) {
+          cloneThumbs.parentElement.removeChild(cloneThumbs);
         }
       }
 
+      // Remove the buttons/footer from the clone
       const cloneFooter = clone.querySelector(".card-footer");
-      if (cloneFooter) {
+      if (cloneFooter && cloneFooter.parentElement) {
         cloneFooter.parentElement.removeChild(cloneFooter);
       }
 
-      pdfWrapper.appendChild(clone);
+      // Append cloned form to pdf root
+      pdfRoot.appendChild(clone);
 
       // Build photo pages after the cloned form
       if (photoData.length) {
@@ -671,7 +659,7 @@
               "Equipment Damage Photos (Page " + (Math.floor(idx / 4) + 1) + ")";
             pageDiv.appendChild(pageTitle);
 
-            pdfWrapper.appendChild(pageDiv);
+            pdfRoot.appendChild(pageDiv);
           }
 
           const card = document.createElement("div");
@@ -691,6 +679,9 @@
           pageDiv.appendChild(card);
         });
       }
+
+      document.body.appendChild(pdfRoot);
+      return pdfRoot;
     }
 
     // Download PDF
@@ -700,19 +691,17 @@
         return;
       }
 
-      buildPdfDom();
-
-      // Make PDF wrapper visible off-screen for rendering
-      pdfWrapper.style.display = "block";
-      pdfWrapper.style.position = "absolute";
-      pdfWrapper.style.left = "-9999px";
-      pdfWrapper.style.top = "0";
+      const pdfElement = buildPdfRoot();
 
       const opt = {
         margin: 0.2,
         filename: "Equipment_Repair_Replace_Notification.pdf",
         image: { type: "jpeg", quality: 0.96 },
-        html2canvas: { scale: 2, useCORS: true },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          scrollY: 0
+        },
         jsPDF: {
           unit: "in",
           format: "letter",
@@ -723,15 +712,13 @@
 
       html2pdf()
         .set(opt)
-        .from(pdfWrapper)
+        .from(pdfElement)
         .save()
         .then(() => {
-          pdfWrapper.style.display = "none";
-          pdfWrapper.innerHTML = "";
+          document.body.removeChild(pdfElement);
         })
         .catch(() => {
-          pdfWrapper.style.display = "none";
-          pdfWrapper.innerHTML = "";
+          document.body.removeChild(pdfElement);
         });
     });
 
