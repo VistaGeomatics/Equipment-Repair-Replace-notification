@@ -50,6 +50,12 @@
       border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
+    /* Ensure the main form is treated as one PDF page */
+    .main-form-page {
+      background: #ffffff;
+      page-break-after: always;
+    }
+
     /* Header */
     .card-header {
       padding: 20px 24px 18px;
@@ -338,6 +344,11 @@
       display: block;
     }
 
+    /* Hide thumbnail grid in the PDF so the first page stays compact */
+    .for-pdf #photoPreview {
+      display: none;
+    }
+
     .photo-page {
       page-break-before: always;
       padding-top: 18px;
@@ -402,163 +413,166 @@
 <body>
   <div class="wrapper">
     <div class="card" id="pdfContent">
-      <!-- Header -->
-      <div class="card-header">
-        <img src="vista-geomatics.png" alt="Vista Geomatics Logo" class="logo" />
-        <div class="header-text">
-          <div class="brand-title">
-            <span class="brand-vista">VISTA</span><span class="brand-geomatics">GEOMATICS</span>
-          </div>
-          <div class="form-title">Equipment Repair / Replace Notification</div>
-          <div class="header-subtitle">
-            Use this form to report damaged or malfunctioning equipment and document the required repair or replacement.
+      <!-- Main form page (forced to be the first page) -->
+      <div class="main-form-page">
+        <!-- Header -->
+        <div class="card-header">
+          <img src="vista-geomatics.png" alt="Vista Geomatics Logo" class="logo" />
+          <div class="header-text">
+            <div class="brand-title">
+              <span class="brand-vista">VISTA</span><span class="brand-geomatics">GEOMATICS</span>
+            </div>
+            <div class="form-title">Equipment Repair / Replace Notification</div>
+            <div class="header-subtitle">
+              Use this form to report damaged or malfunctioning equipment and document the required repair or replacement.
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Body -->
-      <div class="card-body">
-        <!-- Equipment details -->
-        <section class="section">
-          <div class="section-title">
-            Equipment Details
-            <span class="bar"></span>
-          </div>
-
-          <div class="grid-2">
-            <div class="field">
-              <label for="item">Item</label>
-              <input type="text" id="item" name="item" placeholder="e.g., GPS Rover, Data Collector" />
+        <!-- Body -->
+        <div class="card-body">
+          <!-- Equipment details -->
+          <section class="section">
+            <div class="section-title">
+              Equipment Details
+              <span class="bar"></span>
             </div>
 
-            <div class="field">
-              <label for="make">Make</label>
-              <input type="text" id="make" name="make" placeholder="e.g., Trimble, Leica" />
-            </div>
-
-            <div class="field">
-              <label for="model">Model</label>
-              <input type="text" id="model" name="model" placeholder="Model number / name" />
-            </div>
-
-            <div class="field">
-              <label for="serial">Serial #</label>
-              <input type="text" id="serial" name="serial" placeholder="Serial number" />
-            </div>
-          </div>
-        </section>
-
-        <!-- Incident and repair -->
-        <section class="section">
-          <div class="section-title">
-            Incident &amp; Repair Information
-            <span class="bar"></span>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="incident-date">Date of Incident</label>
-              <input type="date" id="incident-date" name="incident-date" />
-            </div>
-            <div class="field">
-              <label for="party-chief">Party Chief</label>
-              <input type="text" id="party-chief" name="party-chief" placeholder="Party Chief name" />
-            </div>
-            <div class="field">
-              <label for="rodman">Rodman</label>
-              <input type="text" id="rodman" name="rodman" placeholder="Rodman / Assistant" />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="repair-desc">Describe repair required</label>
-            <textarea id="repair-desc" name="repair-desc" placeholder="Provide a clear description of the repair or replacement required."></textarea>
-          </div>
-
-          <div class="field">
-            <label for="incident-desc">Describe incident that created need for repair or replacement</label>
-            <textarea id="incident-desc" name="incident-desc" placeholder="Summarize what happened, including location, conditions, and any contributing factors."></textarea>
-          </div>
-        </section>
-
-        <!-- Reporting -->
-        <section class="section">
-          <div class="section-title">
-            Reporting Details
-            <span class="bar"></span>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="date-reported">Date Reported</label>
-              <input type="date" id="date-reported" name="date-reported" />
-            </div>
-            <div class="field">
-              <label for="repair-cost">Estimated Cost of Repair / Replacement</label>
-              <input type="text" id="repair-cost" name="repair-cost" placeholder="$" />
-            </div>
-          </div>
-
-          <p class="muted">Enter who the issue was reported to and, if applicable, how it was reported.</p>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="reported-to">Reported To (Name / Role)</label>
-              <input type="text" id="reported-to" name="reported-to" placeholder="e.g., Operations Manager, Shop Supervisor" />
-            </div>
-            <div class="field">
-              <label for="report-method">Method of Report</label>
-              <input type="text" id="report-method" name="report-method" placeholder="e.g., Phone, In Person, Email" />
-            </div>
-          </div>
-        </section>
-
-        <!-- Photos -->
-        <section class="section">
-          <div class="section-title">
-            Photos of Damage (Optional)
-            <span class="bar"></span>
-          </div>
-
-          <div class="upload-area">
-            <div class="upload-header">
-              <div>
-                <div class="upload-main-text">Attach photos of the damage or defect</div>
-                <div class="upload-sub-text">
-                  Thumbnails will display below. In the PDF, photos will be placed on separate pages, 4 per page, with the descriptions you enter.
-                </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="item">Item</label>
+                <input type="text" id="item" name="item" placeholder="e.g., GPS Rover, Data Collector" />
               </div>
-              <input
-                class="upload-input"
-                type="file"
-                id="photoUpload"
-                accept="image/*"
-                multiple
-              />
+
+              <div class="field">
+                <label for="make">Make</label>
+                <input type="text" id="make" name="make" placeholder="e.g., Trimble, Leica" />
+              </div>
+
+              <div class="field">
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" placeholder="Model number / name" />
+              </div>
+
+              <div class="field">
+                <label for="serial">Serial #</label>
+                <input type="text" id="serial" name="serial" placeholder="Serial number" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Incident and repair -->
+          <section class="section">
+            <div class="section-title">
+              Incident &amp; Repair Information
+              <span class="bar"></span>
             </div>
 
-            <div id="photoPreview" class="photo-preview-grid"></div>
+            <div class="field-row">
+              <div class="field">
+                <label for="incident-date">Date of Incident</label>
+                <input type="date" id="incident-date" name="incident-date" />
+              </div>
+              <div class="field">
+                <label for="party-chief">Party Chief</label>
+                <input type="text" id="party-chief" name="party-chief" placeholder="Party Chief name" />
+              </div>
+              <div class="field">
+                <label for="rodman">Rodman</label>
+                <input type="text" id="rodman" name="rodman" placeholder="Rodman / Assistant" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="repair-desc">Describe repair required</label>
+              <textarea id="repair-desc" name="repair-desc" placeholder="Provide a clear description of the repair or replacement required."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="incident-desc">Describe incident that created need for repair or replacement</label>
+              <textarea id="incident-desc" name="incident-desc" placeholder="Summarize what happened, including location, conditions, and any contributing factors."></textarea>
+            </div>
+          </section>
+
+          <!-- Reporting -->
+          <section class="section">
+            <div class="section-title">
+              Reporting Details
+              <span class="bar"></span>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="date-reported">Date Reported</label>
+                <input type="date" id="date-reported" name="date-reported" />
+              </div>
+              <div class="field">
+                <label for="repair-cost">Estimated Cost of Repair / Replacement</label>
+                <input type="text" id="repair-cost" name="repair-cost" placeholder="$" />
+              </div>
+            </div>
+
+            <p class="muted">Enter who the issue was reported to and, if applicable, how it was reported.</p>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="reported-to">Reported To (Name / Role)</label>
+                <input type="text" id="reported-to" name="reported-to" placeholder="e.g., Operations Manager, Shop Supervisor" />
+              </div>
+              <div class="field">
+                <label for="report-method">Method of Report</label>
+                <input type="text" id="report-method" name="report-method" placeholder="e.g., Phone, In Person, Email" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Photos (thumbnails only for on-screen; hidden for PDF) -->
+          <section class="section">
+            <div class="section-title">
+              Photos of Damage (Optional)
+              <span class="bar"></span>
+            </div>
+
+            <div class="upload-area">
+              <div class="upload-header">
+                <div>
+                  <div class="upload-main-text">Attach photos of the damage or defect</div>
+                  <div class="upload-sub-text">
+                    Thumbnails will display below. In the PDF, photos will be placed on separate pages, 4 per page, with the descriptions you enter.
+                  </div>
+                </div>
+                <input
+                  class="upload-input"
+                  type="file"
+                  id="photoUpload"
+                  accept="image/*"
+                  multiple
+                />
+              </div>
+
+              <div id="photoPreview" class="photo-preview-grid"></div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Footer (part of the main form page) -->
+        <div class="card-footer">
+          <div class="helper-text">
+            Save this completed form as a PDF before submitting it to your supervisor or the office.
           </div>
-        </section>
+          <div class="actions">
+            <button type="button" class="btn btn-secondary" id="resetForm">
+              Reset Form
+            </button>
+            <button type="button" class="btn btn-primary" id="downloadPdf">
+              Download PDF
+            </button>
+          </div>
+        </div>
       </div>
 
-      <!-- Hidden container for PDF photo pages -->
+      <!-- Photo pages appended after the main form page -->
       <div id="photoPagesForPdf"></div>
-
-      <!-- Footer -->
-      <div class="card-footer">
-        <div class="helper-text">
-          Save this completed form as a PDF before submitting it to your supervisor or the office.
-        </div>
-        <div class="actions">
-          <button type="button" class="btn btn-secondary" id="resetForm">
-            Reset Form
-          </button>
-          <button type="button" class="btn btn-primary" id="downloadPdf">
-            Download PDF
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -670,7 +684,7 @@
       // Build photo pages
       buildPhotoPagesForPdf();
 
-      // Make photo pages visible only during PDF generation
+      // Show photo pages and hide thumbnails only during PDF generation
       pdfContent.classList.add("for-pdf");
 
       const opt = {
