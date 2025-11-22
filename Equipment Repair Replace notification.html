@@ -200,7 +200,7 @@
       color: #6b7280;
     }
 
-    /* Photo upload section (screen only) */
+    /* Photo upload section (screen only layout) */
     .upload-area {
       border-radius: 9px;
       border: 1px dashed #c4c9d4;
@@ -253,7 +253,7 @@
 
     .photo-thumb img {
       width: 100%;
-      height: 70px;        /* smaller thumbnails */
+      height: 70px; /* smaller thumbnails */
       object-fit: cover;
       border-radius: 4px;
       border: 1px solid #e5e7eb;
@@ -328,7 +328,24 @@
       color: #6b7280;
     }
 
-    /* PDF photo pages */
+    /* PDF photo pages (inside same container, shown only during PDF) */
+    #photoPagesForPdf {
+      display: none;
+      margin-top: 10px;
+    }
+
+    .for-pdf #photoPagesForPdf {
+      display: block;
+    }
+
+    /* Hide thumbnails, upload control, and footer ONLY in PDF output
+       so adding photos on screen never changes the PDF layout */
+    .for-pdf #photoPreview,
+    .for-pdf #photoUpload,
+    .for-pdf .card-footer {
+      display: none !important;
+    }
+
     .photo-page {
       page-break-before: always;
       padding: 12px 18px 14px;
@@ -392,159 +409,164 @@
 </head>
 <body>
   <div class="wrapper">
-    <!-- SCREEN FORM -->
-    <div class="card" id="screenForm">
-      <div class="card-header">
-        <img src="vista-geomatics.png" alt="Vista Geomatics Logo" class="logo" />
-        <div class="header-text">
-          <div class="brand-title">
-            <span class="brand-vista">VISTA</span><span class="brand-geomatics">GEOMATICS</span>
-          </div>
-          <div class="form-title">Equipment Repair / Replace Notification</div>
-          <div class="header-subtitle">
-            Use this form to report damaged or malfunctioning equipment and document the required repair or replacement.
+    <div class="card" id="pdfContent">
+      <!-- MAIN FORM -->
+      <div class="main-form-page">
+        <div class="card-header">
+          <img src="vista-geomatics.png" alt="Vista Geomatics Logo" class="logo" />
+          <div class="header-text">
+            <div class="brand-title">
+              <span class="brand-vista">VISTA</span><span class="brand-geomatics">GEOMATICS</span>
+            </div>
+            <div class="form-title">Equipment Repair / Replace Notification</div>
+            <div class="header-subtitle">
+              Use this form to report damaged or malfunctioning equipment and document the required repair or replacement.
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="card-body">
-        <!-- Equipment details -->
-        <section class="section">
-          <div class="section-title">
-            Equipment Details
-            <span class="bar"></span>
-          </div>
-
-          <div class="grid-2">
-            <div class="field">
-              <label for="item">Item</label>
-              <input type="text" id="item" name="item" placeholder="e.g., GPS Rover, Data Collector" />
+        <div class="card-body">
+          <!-- Equipment details -->
+          <section class="section">
+            <div class="section-title">
+              Equipment Details
+              <span class="bar"></span>
             </div>
 
-            <div class="field">
-              <label for="make">Make</label>
-              <input type="text" id="make" name="make" placeholder="e.g., Trimble, Topcon" />
-            </div>
-
-            <div class="field">
-              <label for="model">Model</label>
-              <input type="text" id="model" name="model" placeholder="Model number / name" />
-            </div>
-
-            <div class="field">
-              <label for="serial">Serial #</label>
-              <input type="text" id="serial" name="serial" placeholder="Serial number" />
-            </div>
-          </div>
-        </section>
-
-        <!-- Incident and repair -->
-        <section class="section">
-          <div class="section-title">
-            Incident &amp; Repair Information
-            <span class="bar"></span>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="incident-date">Date of Incident</label>
-              <input type="date" id="incident-date" name="incident-date" />
-            </div>
-            <div class="field">
-              <label for="party-chief">Party Chief</label>
-              <input type="text" id="party-chief" name="party-chief" placeholder="Party Chief name" />
-            </div>
-            <div class="field">
-              <label for="rodman">Rodman</label>
-              <input type="text" id="rodman" name="rodman" placeholder="Rodman / Assistant" />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="repair-desc">Describe repair required</label>
-            <textarea id="repair-desc" name="repair-desc" placeholder="Provide a clear description of the repair or replacement required."></textarea>
-          </div>
-
-          <div class="field">
-            <label for="incident-desc">Describe incident that created need for repair or replacement</label>
-            <textarea id="incident-desc" name="incident-desc" placeholder="Summarize what happened, including location, conditions, and any contributing factors."></textarea>
-          </div>
-        </section>
-
-        <!-- Reporting -->
-        <section class="section">
-          <div class="section-title">
-            Reporting Details
-            <span class="bar"></span>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="date-reported">Date Reported</label>
-              <input type="date" id="date-reported" name="date-reported" />
-            </div>
-            <div class="field">
-              <label for="repair-cost">Estimated Cost of Repair / Replacement</label>
-              <input type="text" id="repair-cost" name="repair-cost" placeholder="$" />
-            </div>
-          </div>
-
-          <p class="muted">Enter who the issue was reported to and, if applicable, how it was reported.</p>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="reported-to">Reported To (Name / Role)</label>
-              <input type="text" id="reported-to" name="reported-to" placeholder="e.g., Operations Manager, Shop Supervisor" />
-            </div>
-            <div class="field">
-              <label for="report-method">Method of Report</label>
-              <input type="text" id="report-method" name="report-method" placeholder="e.g., Phone, In Person, Email" />
-            </div>
-          </div>
-        </section>
-
-        <!-- Photos (screen thumbnails only) -->
-        <section class="section" id="photoUploadSection">
-          <div class="section-title">
-            Photos of Damage (Optional)
-            <span class="bar"></span>
-          </div>
-
-          <div class="upload-area">
-            <div class="upload-header">
-              <div>
-                <div class="upload-main-text">Attach photos of the damage or defect</div>
-                <div class="upload-sub-text">
-                  Thumbnails will display below. In the PDF, photos will be placed on separate pages, 4 per page, with the descriptions you enter.
-                </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="item">Item</label>
+                <input type="text" id="item" name="item" placeholder="e.g., GPS Rover, Data Collector" />
               </div>
-              <input
-                class="upload-input"
-                type="file"
-                id="photoUpload"
-                accept="image/*"
-                multiple
-              />
+
+              <div class="field">
+                <label for="make">Make</label>
+                <input type="text" id="make" name="make" placeholder="e.g., Trimble, Topcon" />
+              </div>
+
+              <div class="field">
+                <label for="model">Model</label>
+                <input type="text" id="model" name="model" placeholder="Model number / name" />
+              </div>
+
+              <div class="field">
+                <label for="serial">Serial #</label>
+                <input type="text" id="serial" name="serial" placeholder="Serial number" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Incident and repair -->
+          <section class="section">
+            <div class="section-title">
+              Incident &amp; Repair Information
+              <span class="bar"></span>
             </div>
 
-            <div id="photoPreview" class="photo-preview-grid"></div>
+            <div class="field-row">
+              <div class="field">
+                <label for="incident-date">Date of Incident</label>
+                <input type="date" id="incident-date" name="incident-date" />
+              </div>
+              <div class="field">
+                <label for="party-chief">Party Chief</label>
+                <input type="text" id="party-chief" name="party-chief" placeholder="Party Chief name" />
+              </div>
+              <div class="field">
+                <label for="rodman">Rodman</label>
+                <input type="text" id="rodman" name="rodman" placeholder="Rodman / Assistant" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="repair-desc">Describe repair required</label>
+              <textarea id="repair-desc" name="repair-desc" placeholder="Provide a clear description of the repair or replacement required."></textarea>
+            </div>
+
+            <div class="field">
+              <label for="incident-desc">Describe incident that created need for repair or replacement</label>
+              <textarea id="incident-desc" name="incident-desc" placeholder="Summarize what happened, including location, conditions, and any contributing factors."></textarea>
+            </div>
+          </section>
+
+          <!-- Reporting -->
+          <section class="section">
+            <div class="section-title">
+              Reporting Details
+              <span class="bar"></span>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="date-reported">Date Reported</label>
+                <input type="date" id="date-reported" name="date-reported" />
+              </div>
+              <div class="field">
+                <label for="repair-cost">Estimated Cost of Repair / Replacement</label>
+                <input type="text" id="repair-cost" name="repair-cost" placeholder="$" />
+              </div>
+            </div>
+
+            <p class="muted">Enter who the issue was reported to and, if applicable, how it was reported.</p>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="reported-to">Reported To (Name / Role)</label>
+                <input type="text" id="reported-to" name="reported-to" placeholder="e.g., Operations Manager, Shop Supervisor" />
+              </div>
+              <div class="field">
+                <label for="report-method">Method of Report</label>
+                <input type="text" id="report-method" name="report-method" placeholder="e.g., Phone, In Person, Email" />
+              </div>
+            </div>
+          </section>
+
+          <!-- Photos (screen thumbnails; hidden in PDF) -->
+          <section class="section">
+            <div class="section-title">
+              Photos of Damage (Optional)
+              <span class="bar"></span>
+            </div>
+
+            <div class="upload-area">
+              <div class="upload-header">
+                <div>
+                  <div class="upload-main-text">Attach photos of the damage or defect</div>
+                  <div class="upload-sub-text">
+                    Thumbnails will display below. In the PDF, photos will be placed on separate pages, 4 per page, with the descriptions you enter.
+                  </div>
+                </div>
+                <input
+                  class="upload-input"
+                  type="file"
+                  id="photoUpload"
+                  accept="image/*"
+                  multiple
+                />
+              </div>
+
+              <div id="photoPreview" class="photo-preview-grid"></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="card-footer">
+          <div class="helper-text">
+            Save this completed form as a PDF before submitting it to your supervisor or the office.
           </div>
-        </section>
+          <div class="actions">
+            <button type="button" class="btn btn-secondary" id="resetForm">
+              Reset Form
+            </button>
+            <button type="button" class="btn btn-primary" id="downloadPdf">
+              Download PDF
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div class="card-footer">
-        <div class="helper-text">
-          Save this completed form as a PDF before submitting it to your supervisor or the office.
-        </div>
-        <div class="actions">
-          <button type="button" class="btn btn-secondary" id="resetForm">
-            Reset Form
-          </button>
-          <button type="button" class="btn btn-primary" id="downloadPdf">
-            Download PDF
-          </button>
-        </div>
-      </div>
+      <!-- PHOTO PAGES FOR PDF (generated dynamically) -->
+      <div id="photoPagesForPdf"></div>
     </div>
   </div>
 
@@ -554,7 +576,8 @@
 
     const photoInput = document.getElementById("photoUpload");
     const photoPreview = document.getElementById("photoPreview");
-    const screenForm = document.getElementById("screenForm");
+    const photoPagesForPdf = document.getElementById("photoPagesForPdf");
+    const pdfContent = document.getElementById("pdfContent");
 
     photoInput.addEventListener("change", (event) => {
       const files = Array.from(event.target.files);
@@ -606,82 +629,43 @@
       photoPreview.appendChild(wrapper);
     }
 
-    function buildPdfRoot() {
-      // Create an off-screen container to render into PDF
-      const pdfRoot = document.createElement("div");
-      pdfRoot.style.background = "#ffffff";
-      pdfRoot.style.position = "absolute";
-      pdfRoot.style.left = "-9999px";
-      pdfRoot.style.top = "0";
-      pdfRoot.style.width = "800px";
-      pdfRoot.style.padding = "0";
-      pdfRoot.style.margin = "0";
+    function buildPhotoPagesForPdf() {
+      photoPagesForPdf.innerHTML = "";
+      if (!photoData.length) return;
 
-      // Clone the screen form
-      const clone = screenForm.cloneNode(true);
-      // Give the clone a distinct id
-      clone.id = "pdfForm";
+      let pageDiv = null;
 
-      // Remove upload input + thumbnails from the clone
-      const cloneUploadSection = clone.querySelector("#photoUploadSection");
-      if (cloneUploadSection) {
-        const cloneInput = cloneUploadSection.querySelector("#photoUpload");
-        if (cloneInput && cloneInput.parentElement) {
-          cloneInput.parentElement.removeChild(cloneInput);
+      photoData.forEach((photo, idx) => {
+        if (idx % 4 === 0) {
+          // New photo page
+          pageDiv = document.createElement("div");
+          pageDiv.className = "photo-page";
+
+          const pageTitle = document.createElement("div");
+          pageTitle.className = "photo-page-title";
+          pageTitle.textContent =
+            "Equipment Damage Photos (Page " + (Math.floor(idx / 4) + 1) + ")";
+          pageDiv.appendChild(pageTitle);
+
+          photoPagesForPdf.appendChild(pageDiv);
         }
-        const cloneThumbs = cloneUploadSection.querySelector("#photoPreview");
-        if (cloneThumbs && cloneThumbs.parentElement) {
-          cloneThumbs.parentElement.removeChild(cloneThumbs);
-        }
-      }
 
-      // Remove the buttons/footer from the clone
-      const cloneFooter = clone.querySelector(".card-footer");
-      if (cloneFooter && cloneFooter.parentElement) {
-        cloneFooter.parentElement.removeChild(cloneFooter);
-      }
+        const card = document.createElement("div");
+        card.className = "photo-page-card";
 
-      // Append cloned form to pdf root
-      pdfRoot.appendChild(clone);
+        const img = document.createElement("img");
+        img.src = photo.dataUrl;
+        img.alt = "Damage photo " + (idx + 1);
 
-      // Build photo pages after the cloned form
-      if (photoData.length) {
-        let pageDiv = null;
+        const desc = document.createElement("p");
+        desc.textContent = photo.description
+          ? photo.description
+          : "Photo " + (idx + 1);
 
-        photoData.forEach((photo, idx) => {
-          if (idx % 4 === 0) {
-            pageDiv = document.createElement("div");
-            pageDiv.className = "photo-page";
-
-            const pageTitle = document.createElement("div");
-            pageTitle.className = "photo-page-title";
-            pageTitle.textContent =
-              "Equipment Damage Photos (Page " + (Math.floor(idx / 4) + 1) + ")";
-            pageDiv.appendChild(pageTitle);
-
-            pdfRoot.appendChild(pageDiv);
-          }
-
-          const card = document.createElement("div");
-          card.className = "photo-page-card";
-
-          const img = document.createElement("img");
-          img.src = photo.dataUrl;
-          img.alt = "Damage photo " + (idx + 1);
-
-          const desc = document.createElement("p");
-          desc.textContent = photo.description
-            ? photo.description
-            : "Photo " + (idx + 1);
-
-          card.appendChild(img);
-          card.appendChild(desc);
-          pageDiv.appendChild(card);
-        });
-      }
-
-      document.body.appendChild(pdfRoot);
-      return pdfRoot;
+        card.appendChild(img);
+        card.appendChild(desc);
+        pageDiv.appendChild(card);
+      });
     }
 
     // Download PDF
@@ -691,7 +675,11 @@
         return;
       }
 
-      const pdfElement = buildPdfRoot();
+      // Build photo pages
+      buildPhotoPagesForPdf();
+
+      // Mark content for PDF (hides thumbnails, upload, footer; shows photo pages)
+      pdfContent.classList.add("for-pdf");
 
       const opt = {
         margin: 0.2,
@@ -712,13 +700,15 @@
 
       html2pdf()
         .set(opt)
-        .from(pdfElement)
+        .from(pdfContent)
         .save()
         .then(() => {
-          document.body.removeChild(pdfElement);
+          pdfContent.classList.remove("for-pdf");
+          photoPagesForPdf.innerHTML = "";
         })
         .catch(() => {
-          document.body.removeChild(pdfElement);
+          pdfContent.classList.remove("for-pdf");
+          photoPagesForPdf.innerHTML = "";
         });
     });
 
@@ -726,7 +716,7 @@
     document.getElementById("resetForm").addEventListener("click", () => {
       if (!confirm("Clear all fields and remove all uploaded photos?")) return;
 
-      const inputs = screenForm.querySelectorAll(
+      const inputs = pdfContent.querySelectorAll(
         "input[type='text'], input[type='date'], input[type='number'], textarea"
       );
       inputs.forEach((input) => (input.value = ""));
@@ -734,6 +724,7 @@
       photoData.length = 0;
       photoPreview.innerHTML = "";
       photoInput.value = "";
+      photoPagesForPdf.innerHTML = "";
     });
   </script>
 </body>
